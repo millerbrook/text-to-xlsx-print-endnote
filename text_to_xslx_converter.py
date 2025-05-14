@@ -6,7 +6,7 @@ VALID_COLUMNS = [
     'Reference Type', 'Record Number', 'Author', 'Year', 'Title',
     'Secondary Author', 'Secondary Title', 'Publisher', 'Date',
     'Type of Work', 'Short Title', 'Custom 1', 'Custom 4',
-    'Keywords', "'File' Attachments"
+    'Keywords', "'File' Attachments", 'Label', 'Abstract', 'Research Notes'
 ]
 
 # Define column renaming rules
@@ -50,6 +50,10 @@ def parse_file(file_path):
         if match:
             key = match.group(1).strip()
             value = match.group(2).strip()
+
+            # Map 'Notes' to 'Research Notes'
+            if key == 'Notes':
+                key = 'Research Notes'
 
             # Only process valid column headings
             if key in VALID_COLUMNS:
