@@ -51,6 +51,10 @@ def parse_file(file_path):
             key = match.group(1).strip()
             value = match.group(2).strip()
 
+            # Map 'Notes' to 'Research Notes'
+            if key == 'Notes':
+                key = 'Research Notes'
+
             # Only process valid column headings
             if key in VALID_COLUMNS:
                 current_key = key
