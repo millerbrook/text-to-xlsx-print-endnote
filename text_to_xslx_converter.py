@@ -5,8 +5,8 @@ import pandas as pd
 VALID_COLUMNS = [
     'Reference Type', 'Record Number', 'Author', 'Year', 'Title',
     'Secondary Author', 'Secondary Title', 'Publisher', 'Date',
-    'Type of Work', 'Short Title', 'Custom 1', 'Custom 4',
-    'Keywords', "'File' Attachments"
+    'Type of Work', 'Short Title', 'Custom 1', 'Custom 2', 'Custom 3', 'Custom 4',
+    'Keywords', 'Abstract', 'Notes', 'Research Notes', "'File' Attachments"
 ]
 
 # Define column renaming rules
@@ -84,7 +84,7 @@ def parse_file(file_path):
 
 def main():
     # Path to the input file
-    input_file = 'Amsterdam.txt'
+    input_file = 'Berlin StaBi SAF.txt'
 
     # Parse the file
     records = parse_file(input_file)
