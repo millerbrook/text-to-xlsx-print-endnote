@@ -27,23 +27,16 @@ def parse_file(file_path):
     records = []
     current_record = {}
     current_key = None
-    empty_line_count = 0  # Track consecutive empty lines
 
     for line in lines:
         line = line.strip()
 
-        # Check for empty lines
-        if not line:
-            empty_line_count += 1
-            if empty_line_count == 2:  # End of a record
-                if current_record:
-                    records.append(current_record)
-                    current_record = {}
-                    current_key = None
-                empty_line_count = 0
-            continue
-        else:
-            empty_line_count = 0  # Reset empty line count if a non-empty line is encountered
+        # Start a new record when "Reference Type:" is encountered
+        if line.startswith("Reference Type:"):
+            if current_record:
+                records.append(current_record)
+                current_record = {}
+                current_key = None
 
         # Match lines with a valid column header
         match = re.match(r'^([\w\s\'"]+):\s*(.*)', line)
@@ -68,13 +61,13 @@ def parse_file(file_path):
                     current_record[key] = value
         else:
             # If no valid column header is found, treat it as a continuation of the current key
-            if current_key and current_key in current_record:
+            if current_key and current_key in current_record and line:
                 if isinstance(current_record[current_key], list):
                     current_record[current_key].append(line)
                 else:
                     current_record[current_key] = [current_record[current_key], line]
 
-    # Add the last record if the file doesn't end with two blank lines
+    # Add the last record if the file doesn't end with "Reference Type:"
     if current_record:
         records.append(current_record)
 
