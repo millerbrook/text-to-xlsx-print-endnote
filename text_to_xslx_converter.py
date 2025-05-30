@@ -1,12 +1,14 @@
 import re
 import pandas as pd
+import sys
+import os
 
 # Define valid column headings
 VALID_COLUMNS = [
     'Reference Type', 'Record Number', 'Author', 'Year', 'Title',
     'Secondary Author', 'Secondary Title', 'Publisher', 'Date',
-    'Type of Work', 'Short Title', 'Custom 1', 'Custom 2', 'Custom 3', 'Custom 4',
-    'Keywords', 'Abstract', 'Notes', 'Research Notes', "'File' Attachments"
+    'Type of Work', 'Short Title', 'Custom 1', 'Custom 4',
+    'Keywords', "'File' Attachments"
 ]
 
 # Define column renaming rules
@@ -44,10 +46,6 @@ def parse_file(file_path):
             key = match.group(1).strip()
             value = match.group(2).strip()
 
-            # Map 'Notes' to 'Research Notes'
-            if key == 'Notes':
-                key = 'Research Notes'
-
             # Only process valid column headings
             if key in VALID_COLUMNS:
                 current_key = key
@@ -80,8 +78,13 @@ def parse_file(file_path):
     return records
 
 def main():
-    # Path to the input file
-    input_file = 'Berlin StaBi SAF.txt'
+    if len(sys.argv) < 2:
+        print("Usage: python text_to_xslx_converter.py <input_file>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    base, ext = os.path.splitext(input_file)
+    output_file = f"{base}_converted.xlsx"
 
     # Parse the file
     records = parse_file(input_file)
@@ -101,7 +104,6 @@ def main():
         df[col] = df[col].apply(lambda x: x if not isinstance(x, list) else (x[0] if len(x) == 1 else x))
 
     # Save to an Excel file
-    output_file = 'converted_records.xlsx'
     df.to_excel(output_file, index=False)
     print(f"Data has been parsed and saved to {output_file}")
 
