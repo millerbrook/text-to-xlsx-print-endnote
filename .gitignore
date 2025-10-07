@@ -26,3 +26,6 @@ Thumbs.db
 
 # Excel output files
 *.xlsx
+
+# Text files
+*.txt
